@@ -3,8 +3,60 @@
 <head>
   <meta charset="utf-8">
   <title>Sticker Picker</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      color: white;
+      font-family: sans-serif;
+    }
+  </style>
 </head>
 <body>
-  <script src="https://unpkg.com/stickerpicker"></script>
+
+<div id="app"></div>
+
+<script type="module">
+import { h, render } from "https://unpkg.com/preact?module";
+import htm from "https://unpkg.com/htm?module";
+
+const html = htm.bind(h);
+
+async function loadPacks() {
+  const res = await fetch("./packs/index.json");
+  const packs = await res.json();
+
+  const packData = await Promise.all(
+    packs.map(async (p) => {
+      const r = await fetch(p.stickers);
+      return await r.json();
+    })
+  );
+
+  return packData;
+}
+
+function App({ packs }) {
+  return html`
+    <div style="padding:20px">
+      ${packs.map(pack => html`
+        <div>
+          <h2>${pack.title}</h2>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            ${pack.stickers.map(s => html`
+              <img src=${s.url} width="100" />
+            `)}
+          </div>
+        </div>
+      `)}
+    </div>
+  `;
+}
+
+loadPacks().then(packs => {
+  render(html`<${App} packs=${packs} />`, document.getElementById("app"));
+});
+</script>
+
 </body>
 </html>
