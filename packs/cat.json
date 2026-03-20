@@ -1,0 +1,10 @@
+{
+  "id": "cat",
+  "title": "Кот",
+  "stickers": [
+    {
+      "url": "images/cat/1.png",
+      "body": "🐱"
+    }
+  ]
+}

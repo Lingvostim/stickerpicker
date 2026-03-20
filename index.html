@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sticker Picker</title>
+</head>
+<body>
+  <h2 id="status">Loading...</h2>
+  <div id="packs"></div>
+
+  <script>
+    async function loadPacks() {
+      try {
+        const res = await fetch("../packs/index.json");
+        const data = await res.json();
+
+        const container = document.getElementById("packs");
+        container.innerHTML = "";
+
+        if (!data.packs || data.packs.length === 0) {
+          document.getElementById("status").innerText = "No packs found 😿";
+          return;
+        }
+
+        document.getElementById("status").innerText = "";
+
+        for (const packId of data.packs) {
+          const packRes = await fetch(`../packs/${packId}.json`);
+          const pack = await packRes.json();
+
+          const div = document.createElement("div");
+          div.innerHTML = `<h3>${pack.name}</h3>`;
+
+          for (const sticker of pack.stickers) {
+            const img = document.createElement("img");
+            img.src = "../" + sticker;
+            img.style.width = "150px";
+            img.style.margin = "10px";
+            div.appendChild(img);
+          }
+
+          container.appendChild(div);
+        }
+      } catch (e) {
+        document.getElementById("status").innerText = "Error loading packs";
+        console.error(e);
+      }
+    }
+
+    loadPacks();
+  </script>
+</body>
+</html>
