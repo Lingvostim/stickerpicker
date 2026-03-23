@@ -1,0 +1,16 @@
+{
+  "id": "my-pack",
+  "title": "Test Pack",
+  "stickers": [
+    {
+      "id": "cat1",
+      "body": "cat",
+      "url": "1.png",
+      "info": {
+        "mimetype": "image/png",
+        "w": 512,
+        "h": 512
+      }
+    }
+  ]
+}
